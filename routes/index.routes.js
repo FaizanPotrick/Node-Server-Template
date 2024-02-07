@@ -2,15 +2,16 @@ const express = require("express");
 const router = express.Router();
 const { header, body, cookie, param, query } = require("express-validator");
 
-const fieldHandler = require("../middlewares/fieldHandler");
-const ErrorResponse = require("../utils/errorResponse");
+const fieldHandler = require("../middlewares/fieldHandler.middleware");
+const ApiError = require("../utils/ApiError");
+const ApiResponse = require("../utils/ApiResponse");
 
 router.get(
   "/headers",
   header("auth").trim().notEmpty().withMessage("Auth is required"),
   fieldHandler,
   (req, res) => {
-    res.send("Validation passed");
+    return res.json(new ApiResponse(null, "Validation passed", 200));
   }
 );
 
@@ -33,7 +34,7 @@ router.post(
     .withMessage("Email is invalid"),
   fieldHandler,
   (req, res) => {
-    res.send("Validation passed");
+    return res.json(new ApiResponse(null, "Validation passed", 200));
   }
 );
 
@@ -42,7 +43,7 @@ router.get(
   cookie("connect.sid").trim().notEmpty().withMessage("ID is required"),
   fieldHandler,
   (req, res) => {
-    res.send("Validation passed");
+    return res.json(new ApiResponse(null, "Validation passed", 200));
   }
 );
 
@@ -56,7 +57,7 @@ router.get(
     .withMessage("ID should be alphanumeric"),
   fieldHandler,
   (req, res) => {
-    res.send("Validation passed");
+    return res.json(new ApiResponse(null, "Validation passed", 200));
   }
 );
 
@@ -65,7 +66,7 @@ router.get(
   query("person").trim().notEmpty().withMessage("Person is required"),
   fieldHandler,
   (req, res) => {
-    res.send("Validation passed");
+    return res.json(new ApiResponse(null, "Validation passed", 200));
   }
 );
 
@@ -79,16 +80,23 @@ router.post(
     .withMessage("Email is invalid")
     .custom(async (value, { req, res, next }) => {
       const email = "email1@address.com";
-      if (email === value) throw new ErrorResponse("Email already exists", 400);
+      if (email === value) {
+        throw new ApiError("Email already exists", 400, "EmailExists");
+      }
     }),
   body("password").isLength({ min: 5 }),
   body("confirm_password").custom((value, { req }) => {
-    if (value !== req.body.password)
-      throw new ErrorResponse("Password confirmation does not match", 400);
+    if (value !== req.body.password) {
+      throw new ApiError(
+        "Password confirmation does not match",
+        400,
+        "PasswordMismatch"
+      );
+    }
   }),
   fieldHandler,
   (req, res) => {
-    res.send("Validation passed");
+    return res.json(new ApiResponse(null, "Validation passed", 200));
   }
 );
 
