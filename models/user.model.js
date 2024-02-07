@@ -1,9 +1,10 @@
-const mongoose = require("mongoose");
+const { Schema, connection } = require("mongoose");
+const ApiError = require("../error/ApiError");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET, JWT_EXPIRE, saltRounds } = require("../config");
 
-const UserSchema = new mongoose.Schema(
+const UserSchema = new Schema(
   {
     name: {
       type: String,
@@ -42,7 +43,7 @@ UserSchema.pre("save", async (next) => {
       this.password = await bcrypt.hash(this.password, saltRounds);
     }
   } catch (err) {
-    throw err;
+    next(new ApiError(err.message, 500, "Server Error"));
   }
 });
 
@@ -62,4 +63,4 @@ UserSchema.methods.getSignedJwtToken = function () {
   );
 };
 
-module.exports = mongoose.model("User", UserSchema);
+module.exports = connection.useDb("DB_NAME").model("User", UserSchema);

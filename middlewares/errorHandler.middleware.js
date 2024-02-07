@@ -1,6 +1,4 @@
-const ErrorResponse = require("../utils/errorResponse");
 const ApiError = require("../utils/ApiError");
-const e = require("express");
 
 const errorHandler = (err, req, res, next) => {
   try {
