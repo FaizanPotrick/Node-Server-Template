@@ -2,11 +2,11 @@
   "name": "Node-Server-Template",
   "version": "1.0.0",
   "description": "Your all-in-one Node.js server template for secure web applications with built-in authentication, thorough validation, and seamless MongoDB integration.",
-  "main": "app.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app.js",
-    "dev": "nodemon app.js"
+    "start": "node index.js",
+    "dev": "nodemon index.js"
   },
   "keywords": [],
   "author": "Faizan Potrick",
