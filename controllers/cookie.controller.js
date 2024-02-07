@@ -4,7 +4,7 @@ const ApiResponse = require("../utils/ApiResponse");
 const SetCookie = (req, res, next) => {
   try {
     const token = "this is your token";
-    res
+    return res
       .cookie("token", token, {
         maxAge: 1000 * 60, // 1 minute
       })
@@ -20,7 +20,7 @@ const VerifyCookie = (req, res, next) => {
     if (!token) {
       throw new ApiError("Token not found", 404, "TokenNotFound");
     }
-    res.json(new ApiResponse({ token }, "Cookie is verified", 200));
+    return res.json(new ApiResponse({ token }, "Cookie is verified", 200));
   } catch (err) {
     next(err);
   }
