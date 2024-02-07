@@ -8,12 +8,13 @@ const IndexRoute = require("./routes/index.routes");
 const ClientRouter = require("./routes/client.routes");
 const CookieRouter = require("./routes/cookie.routes");
 const ServerRouter = require("./routes/server.routes");
+const UploadRouter = require("./routes/upload.routes");
 
 const app = express();
 
-app.use(express.json());
+app.use(express.json({limit: "16kb"}))
+app.use(express.urlencoded({extended: true, limit: "16kb"}))
 app.use(cors({ origin: CORS_ORIGIN, credentials: true }));
-app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(
   session({
@@ -28,6 +29,7 @@ app.use("/api/field", IndexRoute);
 app.use("/api/client", ClientRouter);
 app.use("/api/server", ServerRouter);
 app.use("/api/cookie", CookieRouter);
+app.use("/api/upload", UploadRouter);
 
 app.use(errorHandler);
 
