@@ -1,6 +1,5 @@
-const express = require("express");
-const router = express.Router();
 const ApiError = require("../utils/ApiError");
+const ApiResponse = require("../utils/ApiResponse");
 
 const user_id = "1234567890";
 const blacklistedUsers = [];
